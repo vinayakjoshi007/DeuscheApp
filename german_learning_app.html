@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Deutsch Lernen — German Learning App</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0d0c0a;
+  --ink2: #3a3830;
+  --ink3: #7a7870;
+  --paper: #faf8f4;
+  --paper2: #f2efe8;
+  --paper3: #e8e4da;
+  --gold: #c9a84c;
+  --gold2: #e8c96a;
+  --gold-bg: rgba(201,168,76,0.08);
+  --gold-border: rgba(201,168,76,0.3);
+  --rose: #c4758a;
+  --rose-bg: rgba(196,117,138,0.1);
+  --rose-border: rgba(196,117,138,0.3);
+  --teal: #4a8f8a;
+  --teal-bg: rgba(74,143,138,0.1);
+  --teal-border: rgba(74,143,138,0.3);
+  --red: #b85450;
+  --red-bg: rgba(184,84,80,0.1);
+  --border: rgba(13,12,10,0.1);
+  --border2: rgba(13,12,10,0.18);
+  --shadow: 0 2px 20px rgba(0,0,0,0.06);
+  --shadow2: 0 8px 40px rgba(0,0,0,0.12);
+  --r: 14px;
+  --r-sm: 9px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--paper2);
+  background-image: radial-gradient(ellipse at 20% 10%, rgba(201,168,76,0.07) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 90%, rgba(196,117,138,0.06) 0%, transparent 60%);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 5rem;
+}
+
+.app { max-width: 760px; margin: 0 auto; }
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 2rem;
+  padding: 1.5rem 2rem;
+  background: var(--paper);
+  border-radius: var(--r);
+  border: 1px solid var(--gold-border);
+  box-shadow: var(--shadow2);
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+}
+
+.header-icon {
+  width: 56px; height: 56px;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.header p { font-size: 13px; color: var(--ink3); margin-top: 3px; letter-spacing: 0.03em; }
+
+.header-deco {
+  margin-left: auto;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  color: var(--gold);
+  opacity: 0.15;
+  font-style: italic;
+  line-height: 1;
+}
+
+.level-bar { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+
+.level-btn {
+  padding: 7px 20px;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 30px;
+  border: 1px solid var(--border2);
+  background: var(--paper);
+  color: var(--ink3);
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.level-btn.active, .level-btn:hover {
+  background: var(--gold-bg);
+  color: var(--gold);
+  border-color: var(--gold-border);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+}
+
+.tabs-wrap {
+  background: var(--paper);
+  border-radius: var(--r) var(--r) 0 0;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  box-shadow: var(--shadow);
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 8px;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 14px 18px;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  color: var(--ink3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 500; }
+.tab:hover:not(.active) { color: var(--ink2); }
+
+.section-wrap {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--r) var(--r);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* PHRASE CARDS */
+.phrase-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 1.25rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  background: var(--paper2);
+}
+
+.phrase-card:hover { border-color: var(--gold-border); background: var(--paper); box-shadow: var(--shadow); }
+
+.phrase-german {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  padding-right: 44px;
+  line-height: 1.3;
+}
+
+.phrase-english { font-size: 14px; color: var(--ink3); display: none; margin: 6px 0 4px; font-style: italic; }
+.phrase-card.revealed .phrase-english { display: block; }
+.phrase-hint { font-size: 11px; color: var(--gold); letter-spacing: 0.04em; margin-top: 6px; }
+.reveal-tip { font-size: 11px; color: var(--ink3); margin-top: 4px; }
+
+.speak-btn {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--gold-border);
+  background: var(--gold-bg); color: var(--gold);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: all 0.2s;
+}
+.speak-btn:hover { background: var(--gold); color: white; }
+
+/* QUIZ */
+.score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+.score-pill { padding: 4px 14px; border-radius: 30px; font-size: 12px; letter-spacing: 0.04em; background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); }
+.new-word-btn { margin-left: auto; padding: 5px 16px; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; font-family: 'Inter', sans-serif; background: var(--paper2); border: 1px solid var(--border2); border-radius: 30px; cursor: pointer; color: var(--ink2); transition: all 0.2s; }
+.new-word-btn:hover { border-color: var(--gold-border); color: var(--gold); }
+
+.quiz-card { background: var(--paper2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 2rem 1.5rem; }
+.quiz-question { font-family: 'Cormorant Garamond', serif; font-size: 32px; text-align: center; margin-bottom: 1.5rem; font-weight: 500; }
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.quiz-option { padding: 14px; font-size: 13px; font-family: 'Inter', sans-serif; background: var(--paper); border: 1px solid var(--border); border-radius: var(--r-sm); cursor: pointer; text-align: center; transition: all 0.2s; color: var(--ink); }
+.quiz-option:hover:not(:disabled) { border-color: var(--gold-border); background: var(--gold-bg); color: var(--gold); }
+.quiz-option.correct { background: var(--teal-bg); color: var(--teal); border-color: var(--teal-border); }
+.quiz-option.wrong { background: var(--red-bg); color: var(--red); }
+
+/* SPEAKING */
+.speak-panel {
+  background: var(--paper2); border: 1px solid var(--border); border-radius: var(--r-sm);
+  padding: 2.5rem 2rem; text-align: center; margin-bottom: 1rem; position: relative; overflow: hidden;
+}
+.speak-panel::before {
+  content: '\201C'; position: absolute; top: -10px; left: 20px;
+  font-family: 'Cormorant Garamond', serif; font-size: 120px; color: var(--gold); opacity: 0.07; line-height: 1;
+}
+.speak-prompt { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 500; margin-bottom: 6px; position: relative; }
+.speak-subprompt { font-size: 13px; color: var(--ink3); margin-bottom: 2rem; font-style: italic; }
+
+.mic-btn {
+  width: 70px; height: 70px; border-radius: 50%;
+  border: 1px solid var(--gold-border); background: var(--gold-bg); color: var(--gold);
+  cursor: pointer; font-size: 26px; display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.25s; box-shadow: 0 0 0 6px rgba(201,168,76,0.06);
+}
+.mic-btn:hover { background: var(--gold); color: white; box-shadow: 0 0 0 8px rgba(201,168,76,0.12); }
+.mic-btn.recording { background: var(--red-bg); color: var(--red); border-color: var(--red); box-shadow: 0 0 0 8px rgba(184,84,80,0.1); animation: pulse 1s infinite; }
+
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+
+.transcript-box { margin-top: 1.25rem; padding: 12px 16px; background: var(--paper); border: 1px solid var(--border); border-radius: var(--r-sm); font-size: 14px; text-align: left; display: none; font-style: italic; color: var(--ink2); }
+
+.feedback-box { margin-top: 1rem; padding: 12px 16px; border-radius: var(--r-sm); font-size: 13px; line-height: 1.6; text-align: left; display: none; border: 1px solid transparent; }
+.feedback-box.visible { display: block; }
+.feedback-box.good { background: var(--teal-bg); color: var(--teal); border-color: var(--teal-border); }
+.feedback-box.ok { background: var(--gold-bg); color: #7a6020; border-color: var(--gold-border); }
+.feedback-box.bad { background: var(--red-bg); color: var(--red); }
+
+.next-btn { margin-top: 1rem; padding: 9px 24px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; background: transparent; border: 1px solid var(--gold-border); border-radius: 30px; cursor: pointer; color: var(--gold); font-weight: 500; transition: all 0.2s; }
+.next-btn:hover { background: var(--gold); color: white; }
+.error-note { font-size: 11px; color: var(--ink3); margin-top: 8px; text-align: center; }
+
+/* CHAT */
+.chat-box {
+  background: var(--paper2); border: 1px solid var(--border); border-radius: var(--r-sm);
+  min-height: 340px; max-height: 440px; overflow-y: auto;
+  padding: 1.25rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 14px;
+}
+.chat-box::-webkit-scrollbar { width: 4px; }
+.chat-box::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+.msg { display: flex; gap: 10px; align-items: flex-start; }
+.msg.user { flex-direction: row-reverse; }
+
+.msg-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  overflow: hidden; border: 1px solid var(--gold-border); background: #fce8ef;
+}
+.msg-avatar.user-av {
+  background: var(--paper3); border-color: var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+}
+
+.msg-bubble {
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 14px; border-top-left-radius: 4px;
+  padding: 10px 15px; font-size: 14px; line-height: 1.65; max-width: 82%;
+  color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.msg.user .msg-bubble { background: var(--gold-bg); border-color: var(--gold-border); border-top-left-radius: 14px; border-top-right-radius: 4px; }
+
+.chat-input-row { display: flex; gap: 8px; }
+.chat-input-row input { flex: 1; padding: 12px 16px; font-size: 14px; font-family: 'Inter', sans-serif; border: 1px solid var(--border2); border-radius: var(--r-sm); background: var(--paper); color: var(--ink); outline: none; transition: border-color 0.2s; }
+.chat-input-row input:focus { border-color: var(--gold-border); box-shadow: 0 0 0 3px rgba(201,168,76,0.08); }
+.chat-input-row input::placeholder { color: var(--ink3); }
+
+.send-btn { padding: 12px 20px; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; font-family: 'Inter', sans-serif; background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); border-radius: var(--r-sm); cursor: pointer; font-weight: 500; transition: all 0.2s; }
+.send-btn:hover { background: var(--gold); color: white; }
+.send-btn:disabled { opacity: 0.45; cursor: default; }
+
+/* CONVO */
+.convo-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.topic-select { padding: 7px 12px; font-size: 13px; font-family: 'Inter', sans-serif; border: 1px solid var(--border2); border-radius: var(--r-sm); background: var(--paper2); color: var(--ink); cursor: pointer; outline: none; }
+.topic-select:focus { border-color: var(--gold-border); }
+.new-convo-btn { padding: 7px 16px; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; font-family: 'Inter', sans-serif; background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); border-radius: var(--r-sm); cursor: pointer; font-weight: 500; transition: all 0.2s; }
+.new-convo-btn:hover { background: var(--gold); color: white; }
+
+.hint-chip { padding: 5px 13px; font-size: 12px; font-family: 'Inter', sans-serif; background: var(--paper); border: 1px solid var(--border); border-radius: 30px; cursor: pointer; color: var(--ink2); transition: all 0.2s; }
+.hint-chip:hover { border-color: var(--gold-border); color: var(--gold); background: var(--gold-bg); }
+.correction-badge { display: inline-block; margin-top: 6px; padding: 4px 10px; font-size: 12px; border-radius: var(--r-sm); background: var(--gold-bg); color: #7a6020; border: 1px solid var(--gold-border); }
+
+.convo-mic-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border2); background: var(--paper2); color: var(--ink2); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+.convo-mic-btn:hover { border-color: var(--gold-border); color: var(--gold); }
+.convo-mic-btn.recording { background: var(--red-bg); color: var(--red); border-color: var(--red); animation: pulse 1s infinite; }
+
+.api-note { font-size: 11px; color: var(--ink3); margin-top: 8px; text-align: center; letter-spacing: 0.02em; }
+
+.typing-dots span { display: inline-block; animation: bounce 1.2s infinite; font-size: 22px; color: var(--gold); }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+
+/* API KEY BANNER */
+.key-banner {
+  background: var(--paper);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow);
+  flex-wrap: wrap;
+}
+.key-banner.ok { border-color: var(--teal-border); background: var(--teal-bg); }
+.key-banner.ok .key-label { color: var(--teal); }
+.key-label { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); font-weight: 500; white-space: nowrap; }
+.key-input {
+  flex: 1; min-width: 180px;
+  padding: 8px 12px; font-size: 13px; font-family: 'Inter', sans-serif;
+  border: 1px solid var(--border2); border-radius: var(--r-sm);
+  background: var(--paper2); color: var(--ink); outline: none;
+  letter-spacing: 0.04em;
+}
+.key-input:focus { border-color: var(--gold-border); }
+.key-save-btn {
+  padding: 8px 18px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  font-family: 'Inter', sans-serif; background: var(--gold-bg); color: var(--gold);
+  border: 1px solid var(--gold-border); border-radius: var(--r-sm);
+  cursor: pointer; font-weight: 500; transition: all 0.2s; white-space: nowrap;
+}
+.key-save-btn:hover { background: var(--gold); color: white; }
+.key-clear-btn {
+  padding: 8px 14px; font-size: 12px; font-family: 'Inter', sans-serif;
+  background: transparent; color: var(--ink3);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  cursor: pointer; transition: all 0.2s;
+}
+.key-clear-btn:hover { color: var(--red); border-color: var(--red); }
+.key-status { font-size: 12px; color: var(--teal); margin-left: 4px; }
+
+
+/* ── EXAM STYLES ── */
+.exam-level-bar { display:flex; gap:8px; margin-bottom:1.25rem; flex-wrap:wrap; }
+.exam-level-btn {
+  padding:7px 20px; font-size:11px; font-family:'Inter',sans-serif;
+  letter-spacing:0.08em; text-transform:uppercase; border-radius:30px;
+  border:1px solid var(--border2); background:var(--paper2); color:var(--ink3);
+  cursor:pointer; transition:all 0.2s;
+}
+.exam-level-btn.active { background:var(--rose-bg); color:var(--rose); border-color:var(--rose-border); }
+.exam-level-btn:hover { background:var(--rose-bg); color:var(--rose); border-color:var(--rose-border); }
+
+.skill-tabs { display:flex; gap:8px; margin-bottom:1.25rem; flex-wrap:wrap; }
+.skill-tab {
+  padding:7px 16px; font-size:12px; font-family:'Inter',sans-serif;
+  letter-spacing:0.05em; border-radius:30px;
+  border:1px solid var(--border); background:var(--paper2); color:var(--ink3);
+  cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:6px;
+}
+.skill-tab.active { background:var(--gold-bg); color:var(--gold); border-color:var(--gold-border); font-weight:500; }
+.skill-tab:hover:not(.active) { border-color:var(--border2); color:var(--ink); }
+
+.exam-card {
+  background:var(--paper2); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:1.5rem; margin-bottom:1rem;
+  position:relative;
+}
+.exam-label {
+  font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--rose); font-weight:500; margin-bottom:0.75rem;
+  display:flex; align-items:center; gap:6px;
+}
+.exam-text {
+  font-family:'Cormorant Garamond',serif; font-size:18px; line-height:1.7;
+  color:var(--ink); margin-bottom:1rem;
+}
+.exam-question {
+  font-size:14px; font-weight:500; color:var(--ink); margin-bottom:0.75rem;
+}
+.exam-option {
+  display:block; width:100%; text-align:left;
+  padding:10px 14px; margin-bottom:8px; font-size:13px;
+  font-family:'Inter',sans-serif; background:var(--paper);
+  border:1px solid var(--border); border-radius:var(--r-sm);
+  cursor:pointer; color:var(--ink); transition:all 0.2s;
+}
+.exam-option:hover:not(:disabled) { border-color:var(--gold-border); background:var(--gold-bg); }
+.exam-option.correct { background:var(--teal-bg); color:var(--teal); border-color:var(--teal-border); }
+.exam-option.wrong { background:var(--red-bg); color:var(--red); }
+
+.exam-textarea {
+  width:100%; min-height:120px; padding:12px 14px;
+  font-size:14px; font-family:'Inter',sans-serif; line-height:1.6;
+  border:1px solid var(--border2); border-radius:var(--r-sm);
+  background:var(--paper); color:var(--ink); outline:none; resize:vertical;
+  transition:border-color 0.2s;
+}
+.exam-textarea:focus { border-color:var(--gold-border); }
+
+.exam-submit-btn {
+  margin-top:0.75rem; padding:10px 24px; font-size:12px;
+  letter-spacing:0.06em; text-transform:uppercase; font-family:'Inter',sans-serif;
+  background:var(--gold-bg); color:var(--gold); border:1px solid var(--gold-border);
+  border-radius:30px; cursor:pointer; font-weight:500; transition:all 0.2s;
+}
+.exam-submit-btn:hover { background:var(--gold); color:white; }
+.exam-submit-btn:disabled { opacity:0.45; cursor:default; }
+
+.exam-feedback {
+  margin-top:1rem; padding:14px 16px; border-radius:var(--r-sm);
+  font-size:13px; line-height:1.7; border:1px solid transparent; display:none;
+}
+.exam-feedback.visible { display:block; }
+.exam-feedback.pass { background:var(--teal-bg); color:var(--teal); border-color:var(--teal-border); }
+.exam-feedback.partial { background:var(--gold-bg); color:#7a6020; border-color:var(--gold-border); }
+.exam-feedback.fail { background:var(--red-bg); color:var(--red); }
+
+.exam-score-bar {
+  display:flex; gap:16px; padding:1rem 1.25rem;
+  background:var(--paper); border:1px solid var(--border);
+  border-radius:var(--r-sm); margin-bottom:1.25rem; flex-wrap:wrap;
+}
+.exam-score-item { text-align:center; }
+.exam-score-num { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:500; color:var(--ink); }
+.exam-score-lbl { font-size:10px; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink3); margin-top:2px; }
+
+.listen-btn {
+  padding:9px 20px; font-size:12px; letter-spacing:0.06em; text-transform:uppercase;
+  font-family:'Inter',sans-serif; background:var(--rose-bg); color:var(--rose);
+  border:1px solid var(--rose-border); border-radius:30px; cursor:pointer;
+  font-weight:500; transition:all 0.2s; display:inline-flex; align-items:center; gap:6px;
+}
+.listen-btn:hover { background:var(--rose); color:white; }
+.exam-new-btn {
+  padding:9px 20px; font-size:12px; letter-spacing:0.06em; text-transform:uppercase;
+  font-family:'Inter',sans-serif; background:var(--paper2); color:var(--ink2);
+  border:1px solid var(--border2); border-radius:30px; cursor:pointer; transition:all 0.2s;
+}
+.exam-new-btn:hover { border-color:var(--gold-border); color:var(--gold); }
+.exam-loading { text-align:center; padding:2.5rem; color:var(--ink3); font-size:13px; }
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-icon">🇩🇪</div>
+    <div>
+      <h1>Deutsch Lernen</h1>
+      <p>Your personal AI-powered German tutor</p>
+    </div>
+    <div class="header-deco">D</div>
+  </div>
+
+  <!-- GROQ API KEY BANNER -->
+  <div class="key-banner" id="key-banner">
+    <span class="key-label">🔑 Groq API Key</span>
+    <input class="key-input" type="password" id="key-input" placeholder="Paste your free Groq key: gsk_..." />
+    <button class="key-save-btn" onclick="saveKey()">Save Key</button>
+    <a href="https://console.groq.com/keys" target="_blank" style="font-size:12px;color:var(--gold);text-decoration:none;white-space:nowrap">Get free key ↗</a>
+  </div>
+
+
+  <div class="level-bar">
+    <button class="level-btn active" onclick="setLevel('Beginner')">Beginner</button>
+    <button class="level-btn" onclick="setLevel('Intermediate')">Intermediate</button>
+    <button class="level-btn" onclick="setLevel('Advanced')">Advanced</button>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('phrases')">Phrases</button>
+      <button class="tab" onclick="showTab('quiz')">Vocab Quiz</button>
+      <button class="tab" onclick="showTab('speak')">Speaking</button>
+      <button class="tab" onclick="showTab('convo')">Conversation</button>
+      <button class="tab" onclick="showTab('tutor')">AI Tutor</button>
+      <button class="tab" onclick="showTab('exam')">🎓 Goethe Exam</button>
+    </div>
+
+    <div class="section-wrap">
+
+      <!-- PHRASES -->
+      <div id="section-phrases" class="section active">
+        <div id="phrases-list"></div>
+      </div>
+
+      <!-- QUIZ -->
+      <div id="section-quiz" class="section">
+        <div class="score-row">
+          <span style="font-size:11px;color:var(--ink3);letter-spacing:0.08em;text-transform:uppercase">Score</span>
+          <span class="score-pill" id="score-display">0 / 0</span>
+          <button class="new-word-btn" onclick="loadQuiz()">New Word ↻</button>
+        </div>
+        <div class="quiz-card" id="quiz-area"></div>
+      </div>
+
+      <!-- SPEAKING -->
+      <div id="section-speak" class="section">
+        <div class="speak-panel">
+          <div class="speak-prompt" id="speak-prompt">Guten Morgen!</div>
+          <div class="speak-subprompt" id="speak-subprompt">Good morning! — Click the mic and say this phrase.</div>
+          <button class="mic-btn" id="mic-btn" onclick="toggleRecording()">🎤</button>
+          <div class="transcript-box" id="transcript-box"></div>
+          <div class="feedback-box" id="feedback-box"></div>
+          <br/>
+          <button class="next-btn" onclick="nextSpeakPrompt()">Next Phrase →</button>
+        </div>
+        <p class="error-note" id="speak-error"></p>
+      </div>
+
+      <!-- CONVERSATION -->
+      <div id="section-convo" class="section">
+        <div class="convo-header">
+          <div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500">Live Conversation</div>
+            <div style="font-size:12px;color:var(--ink3);font-style:italic;margin-top:2px">The AI plays a character — you reply in German</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <select id="convo-topic" class="topic-select">
+              <option value="cafe">☕ At a café</option>
+              <option value="directions">🗺️ Asking for directions</option>
+              <option value="shopping">🛍️ Shopping</option>
+              <option value="weather">🌤️ Talking about weather</option>
+              <option value="intro">👋 Meeting someone new</option>
+              <option value="travel">✈️ Travel & holidays</option>
+              <option value="food">🍽️ Ordering food</option>
+              <option value="work">💼 Talking about work</option>
+            </select>
+            <button class="new-convo-btn" onclick="startConvo()">New Chat ↺</button>
+          </div>
+        </div>
+        <div class="chat-box" id="convo-box" style="min-height:380px;max-height:460px"></div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input type="text" id="convo-input" placeholder="Antworten Sie auf Deutsch… (Reply in German)" onkeydown="if(event.key==='Enter')sendConvo()" style="flex:1;padding:12px 16px;font-size:14px;font-family:'Inter',sans-serif;border:1px solid var(--border2);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);outline:none" />
+          <button id="convo-mic" class="convo-mic-btn" onclick="toggleConvoMic()" title="Hold to speak — auto-sends on pause">🎤</button>
+          <button id="convo-send" class="send-btn" onclick="sendConvo()">Send ↗</button>
+        </div>
+        <div id="interim-display" style="display:none;font-size:12px;color:var(--ink3);font-style:italic;padding:4px 6px;min-height:20px;transition:opacity 0.2s"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center" id="hint-row"></div>
+        <p class="error-note" id="convo-error"></p>
+      </div>
+
+      <!-- AI TUTOR -->
+      <div id="section-tutor" class="section">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)">
+          <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid var(--rose-border);flex-shrink:0;box-shadow:0 4px 14px rgba(196,117,138,0.2)">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;background:#fce8ef">
+              <ellipse cx="24" cy="21" rx="14" ry="16" fill="#5c3a1e"/>
+              <rect x="20" y="33" width="8" height="7" rx="3" fill="#f5c6a0"/>
+              <ellipse cx="24" cy="23" rx="11" ry="12" fill="#f5c6a0"/>
+              <ellipse cx="24" cy="12" rx="11" ry="7" fill="#7a4e2d"/>
+              <ellipse cx="12" cy="21" rx="4" ry="8" fill="#7a4e2d"/>
+              <ellipse cx="36" cy="21" rx="4" ry="8" fill="#7a4e2d"/>
+              <ellipse cx="19.5" cy="22" rx="2" ry="2.2" fill="#fff"/>
+              <ellipse cx="28.5" cy="22" rx="2" ry="2.2" fill="#fff"/>
+              <circle cx="19.5" cy="22.3" r="1.3" fill="#3d2008"/>
+              <circle cx="28.5" cy="22.3" r="1.3" fill="#3d2008"/>
+              <circle cx="20" cy="21.8" r="0.4" fill="white"/>
+              <circle cx="29" cy="21.8" r="0.4" fill="white"/>
+              <path d="M17 19 Q19.5 17.8 22 19" stroke="#4a2c0a" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+              <path d="M26 19 Q28.5 17.8 31 19" stroke="#4a2c0a" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+              <path d="M23 26 Q24 27.5 25 26" stroke="#d4956a" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+              <path d="M20.5 29.5 Q24 32 27.5 29.5" stroke="#c4758a" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+              <ellipse cx="16.5" cy="26" rx="2.5" ry="1.5" fill="#f0a0b0" opacity="0.5"/>
+              <ellipse cx="31.5" cy="26" rx="2.5" ry="1.5" fill="#f0a0b0" opacity="0.5"/>
+              <path d="M13 48 Q16 38 24 37 Q32 38 35 48Z" fill="#c4758a"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;color:var(--ink)">Lena — German Tutor</div>
+            <div style="font-size:12px;color:var(--ink3);font-style:italic;margin-top:2px">Ask me anything in German or English</div>
+          </div>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#4a9;box-shadow:0 0 6px rgba(68,170,100,0.6)"></div>
+            <span style="font-size:11px;color:var(--ink3);letter-spacing:0.04em">Online</span>
+          </div>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+          <div class="msg">
+            <div class="msg-avatar" id="lena-av-init">
+              <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;background:#fce8ef">
+                <ellipse cx="24" cy="21" rx="14" ry="16" fill="#5c3a1e"/>
+                <rect x="20" y="33" width="8" height="7" rx="3" fill="#f5c6a0"/>
+                <ellipse cx="24" cy="23" rx="11" ry="12" fill="#f5c6a0"/>
+                <ellipse cx="24" cy="12" rx="11" ry="7" fill="#7a4e2d"/>
+                <ellipse cx="12" cy="21" rx="4" ry="8" fill="#7a4e2d"/>
+                <ellipse cx="36" cy="21" rx="4" ry="8" fill="#7a4e2d"/>
+                <ellipse cx="19.5" cy="22" rx="2" ry="2.2" fill="#fff"/>
+                <ellipse cx="28.5" cy="22" rx="2" ry="2.2" fill="#fff"/>
+                <circle cx="19.5" cy="22.3" r="1.3" fill="#3d2008"/>
+                <circle cx="28.5" cy="22.3" r="1.3" fill="#3d2008"/>
+                <circle cx="20" cy="21.8" r="0.4" fill="white"/>
+                <circle cx="29" cy="21.8" r="0.4" fill="white"/>
+                <path d="M17 19 Q19.5 17.8 22 19" stroke="#4a2c0a" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+                <path d="M26 19 Q28.5 17.8 31 19" stroke="#4a2c0a" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+                <path d="M23 26 Q24 27.5 25 26" stroke="#d4956a" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+                <path d="M20.5 29.5 Q24 32 27.5 29.5" stroke="#c4758a" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                <ellipse cx="16.5" cy="26" rx="2.5" ry="1.5" fill="#f0a0b0" opacity="0.5"/>
+                <ellipse cx="31.5" cy="26" rx="2.5" ry="1.5" fill="#f0a0b0" opacity="0.5"/>
+                <path d="M13 48 Q16 38 24 37 Q32 38 35 48Z" fill="#c4758a"/>
+              </svg>
+            </div>
+            <div class="msg-bubble">Hallo! Ich bin Lena, deine Deutschlehrerin! 👋<br><span style="font-style:italic;color:var(--ink3);font-size:13px">Hi! I'm Lena, your German tutor!</span><br><br>Ask me anything — grammar questions, translations, pronunciation help, or just chat in German and I'll gently correct you. <em>Was möchtest du lernen?</em></div>
+          </div>
+        </div>
+
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" placeholder="Ask Lena a question or write in German…" onkeydown="if(event.key==='Enter')sendChat()" />
+          <button class="send-btn" id="send-btn" onclick="sendChat()">Send ↗</button>
+        </div>
+        <p class="api-note">Powered by Claude AI · Requires internet connection</p>
+      </div>
+
+      <!-- GOETHE EXAM PRACTICE -->
+      <div id="section-exam" class="section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500">Goethe Exam Practice</div>
+            <div style="font-size:12px;color:var(--ink3);font-style:italic;margin-top:2px">AI-generated practice tests — Reading · Writing · Speaking · Listening</div>
+          </div>
+          <button class="exam-new-btn" onclick="loadExam()">New Exercise ↻</button>
+        </div>
+
+        <!-- Exam level selector -->
+        <div class="exam-level-bar">
+          <button class="exam-level-btn active" onclick="setExamLevel('A1')">A1 — Starter</button>
+          <button class="exam-level-btn" onclick="setExamLevel('A2')">A2 — Elementary</button>
+          <button class="exam-level-btn" onclick="setExamLevel('B1')">B1 — Intermediate</button>
+        </div>
+
+        <!-- Skill selector -->
+        <div class="skill-tabs">
+          <button class="skill-tab active" onclick="setExamSkill('reading')">📖 Reading</button>
+          <button class="skill-tab" onclick="setExamSkill('writing')">✏️ Writing</button>
+          <button class="skill-tab" onclick="setExamSkill('speaking')">🎤 Speaking</button>
+          <button class="skill-tab" onclick="setExamSkill('listening')">🔊 Listening</button>
+        </div>
+
+        <!-- Score bar -->
+        <div class="exam-score-bar">
+          <div class="exam-score-item">
+            <div class="exam-score-num" id="exam-score-correct">0</div>
+            <div class="exam-score-lbl">Correct</div>
+          </div>
+          <div class="exam-score-item">
+            <div class="exam-score-num" id="exam-score-total">0</div>
+            <div class="exam-score-lbl">Total</div>
+          </div>
+          <div class="exam-score-item" style="margin-left:auto">
+            <div class="exam-score-num" id="exam-score-pct">—</div>
+            <div class="exam-score-lbl">Score</div>
+          </div>
+        </div>
+
+        <!-- Exercise area -->
+        <div id="exam-area">
+          <div class="exam-loading">Click <strong>New Exercise</strong> to start your first practice question</div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+let currentLevel = 'Beginner';
+let quizScore = 0, quizTotal = 0;
+let recognition = null, isRecording = false;
+let speakIndex = 0;
+
+const GIRL_SVG = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;background:#fce8ef"><ellipse cx="24" cy="21" rx="14" ry="16" fill="#5c3a1e"/><rect x="20" y="33" width="8" height="7" rx="3" fill="#f5c6a0"/><ellipse cx="24" cy="23" rx="11" ry="12" fill="#f5c6a0"/><ellipse cx="24" cy="12" rx="11" ry="7" fill="#7a4e2d"/><ellipse cx="12" cy="21" rx="4" ry="8" fill="#7a4e2d"/><ellipse cx="36" cy="21" rx="4" ry="8" fill="#7a4e2d"/><ellipse cx="19.5" cy="22" rx="2" ry="2.2" fill="#fff"/><ellipse cx="28.5" cy="22" rx="2" ry="2.2" fill="#fff"/><circle cx="19.5" cy="22.3" r="1.3" fill="#3d2008"/><circle cx="28.5" cy="22.3" r="1.3" fill="#3d2008"/><circle cx="20" cy="21.8" r="0.4" fill="white"/><circle cx="29" cy="21.8" r="0.4" fill="white"/><path d="M17 19 Q19.5 17.8 22 19" stroke="#4a2c0a" stroke-width="1.1" fill="none" stroke-linecap="round"/><path d="M26 19 Q28.5 17.8 31 19" stroke="#4a2c0a" stroke-width="1.1" fill="none" stroke-linecap="round"/><path d="M23 26 Q24 27.5 25 26" stroke="#d4956a" stroke-width="0.9" fill="none" stroke-linecap="round"/><path d="M20.5 29.5 Q24 32 27.5 29.5" stroke="#c4758a" stroke-width="1.3" fill="none" stroke-linecap="round"/><ellipse cx="16.5" cy="26" rx="2.5" ry="1.5" fill="#f0a0b0" opacity="0.5"/><ellipse cx="31.5" cy="26" rx="2.5" ry="1.5" fill="#f0a0b0" opacity="0.5"/><path d="M13 48 Q16 38 24 37 Q32 38 35 48Z" fill="#c4758a"/></svg>`;
+
+const phrasesData = {
+  Beginner: [
+    { de: 'Guten Morgen!', en: 'Good morning!', hint: 'Used in the morning until ~noon' },
+    { de: 'Wie heißen Sie?', en: 'What is your name? (formal)', hint: '"heißen" = to be called' },
+    { de: 'Ich heiße...', en: 'My name is...', hint: 'Literally "I am called…"' },
+    { de: 'Wie geht es Ihnen?', en: 'How are you? (formal)', hint: 'Literally "How goes it to you?"' },
+    { de: 'Danke, gut!', en: 'Thanks, good!', hint: 'Simple positive reply' },
+    { de: 'Entschuldigung!', en: 'Excuse me / Sorry!', hint: 'Used for apologies & getting attention' },
+    { de: 'Sprechen Sie Englisch?', en: 'Do you speak English?', hint: 'Formal "Sie" form' },
+    { de: 'Wo ist die Toilette?', en: 'Where is the bathroom?', hint: '"Toilette" borrowed from French' },
+  ],
+  Intermediate: [
+    { de: 'Könnten Sie das wiederholen?', en: 'Could you repeat that?', hint: 'Polite subjunctive "könnten"' },
+    { de: 'Ich verstehe das nicht ganz.', en: "I don't quite understand.", hint: '"nicht ganz" = not quite' },
+    { de: 'Was bedeutet dieses Wort?', en: 'What does this word mean?', hint: '"bedeuten" = to mean' },
+    { de: 'Ich lerne seit sechs Monaten Deutsch.', en: 'I have been learning German for six months.', hint: '"seit" + present tense for ongoing actions' },
+    { de: 'Darf ich fragen, woher Sie kommen?', en: 'May I ask where you are from?', hint: '"darf" = may (permission)' },
+    { de: 'Das schmeckt sehr lecker!', en: 'That tastes very delicious!', hint: '"lecker" is very common in German' },
+  ],
+  Advanced: [
+    { de: 'Es wäre schön, wenn wir uns öfter treffen würden.', en: 'It would be nice if we met more often.', hint: 'Konjunktiv II for hypotheticals' },
+    { de: 'Ich bin damit einverstanden, dass...', en: 'I agree that...', hint: '"einverstanden sein" = to agree' },
+    { de: 'Das kommt darauf an, was Sie meinen.', en: 'That depends on what you mean.', hint: '"darauf ankommen" = to depend on' },
+    { de: 'Man muss das im Kontext betrachten.', en: 'One must consider this in context.', hint: '"man" = one/people in general' },
+    { de: 'Obwohl es schwierig ist, lohnt es sich.', en: 'Although it is difficult, it is worth it.', hint: '"obwohl" flips verb to end of clause' },
+  ]
+};
+
+const vocabData = {
+  Beginner: [
+    { de: 'der Hund', en: 'the dog', opts: ['the cat', 'the dog', 'the bird', 'the fish'] },
+    { de: 'das Buch', en: 'the book', opts: ['the pen', 'the desk', 'the book', 'the bag'] },
+    { de: 'die Schule', en: 'the school', opts: ['the school', 'the office', 'the shop', 'the house'] },
+    { de: 'essen', en: 'to eat', opts: ['to sleep', 'to eat', 'to run', 'to drink'] },
+    { de: 'groß', en: 'big/tall', opts: ['small', 'big/tall', 'old', 'fast'] },
+    { de: 'heute', en: 'today', opts: ['tomorrow', 'yesterday', 'today', 'now'] },
+    { de: 'die Familie', en: 'the family', opts: ['the family', 'the friend', 'the child', 'the sister'] },
+  ],
+  Intermediate: [
+    { de: 'trotzdem', en: 'nevertheless', opts: ['therefore', 'however', 'nevertheless', 'finally'] },
+    { de: 'verbessern', en: 'to improve', opts: ['to worsen', 'to improve', 'to change', 'to begin'] },
+    { de: 'der Zusammenhang', en: 'the context/connection', opts: ['the problem', 'the answer', 'the context/connection', 'the result'] },
+    { de: 'übrigens', en: 'by the way', opts: ['obviously', 'by the way', 'especially', 'in fact'] },
+    { de: 'die Voraussetzung', en: 'the requirement', opts: ['the exception', 'the requirement', 'the plan', 'the mistake'] },
+  ],
+  Advanced: [
+    { de: 'die Auseinandersetzung', en: 'the confrontation/debate', opts: ['the agreement', 'the celebration', 'the confrontation/debate', 'the election'] },
+    { de: 'Weltanschauung', en: 'worldview', opts: ['global travel', 'worldview', 'world peace', 'world hunger'] },
+    { de: 'schadenfroh', en: 'gleeful at others misfortune', opts: ['joyful', 'sad', 'gleeful at others misfortune', 'angry'] },
+    { de: 'das Fingerspitzengefühl', en: 'delicacy/tact', opts: ['stubbornness', 'delicacy/tact', 'courage', 'patience'] },
+  ]
+};
+
+const speakPrompts = {
+  Beginner: [
+    { de: 'Guten Morgen!', en: 'Good morning!' },
+    { de: 'Wie geht es Ihnen?', en: 'How are you?' },
+    { de: 'Danke schön!', en: 'Thank you very much!' },
+    { de: 'Ich heiße...', en: 'My name is...' },
+    { de: 'Tschüss!', en: 'Goodbye!' },
+  ],
+  Intermediate: [
+    { de: 'Könnten Sie das bitte wiederholen?', en: 'Could you please repeat that?' },
+    { de: 'Ich lerne schon seit einem Jahr Deutsch.', en: 'I have been learning German for a year.' },
+    { de: 'Das schmeckt wirklich sehr gut!', en: 'That tastes really very good!' },
+  ],
+  Advanced: [
+    { de: 'Man muss das im Kontext betrachten.', en: 'One must consider this in context.' },
+    { de: 'Es wäre schön, wenn wir uns öfter träfen.', en: 'It would be nice if we met more often.' },
+    { de: 'Das kommt ganz darauf an, was Sie meinen.', en: 'That entirely depends on what you mean.' },
+  ]
+};
+
+function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// ── TTS ENGINE ──
+let ttsActive = false;
+
+function speakGerman(input) {
+  if (!input) return;
+  const lines = (Array.isArray(input) ? input : [input])
+    .map(l => l.trim()).filter(l => l.length > 1);
+  if (lines.length === 0) return;
+
+  // Cancel current speech, reset flag, then start fresh after browser clears
+  window.speechSynthesis.cancel();
+  ttsActive = false;
+
+  function speakLine(index) {
+    if (index >= lines.length) { ttsActive = false; return; }
+    ttsActive = true;
+    const u = new SpeechSynthesisUtterance(lines[index]);
+    u.lang = 'de-DE';
+    u.rate = 0.88;
+    u.onend  = () => { ttsActive = false; speakLine(index + 1); };
+    u.onerror = () => { ttsActive = false; speakLine(index + 1); };
+    window.speechSynthesis.speak(u);
+  }
+
+  // Wait 300ms for cancel() to fully clear, then speak all lines in sequence
+  setTimeout(() => speakLine(0), 300);
+}
+
+function stopSpeaking() {
+  window.speechSynthesis.cancel();
+  ttsActive = false;
+}
+
+function setLevel(l) {
+  currentLevel = l;
+  document.querySelectorAll('.level-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === l));
+  loadPhrases(); loadQuiz(); speakIndex = 0; loadSpeakPrompt();
+}
+
+function showTab(t) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.getAttribute('onclick').includes("'"+t+"'")));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + t).classList.add('active');
+  if (t === 'convo' && convoHistory.length === 0) startConvo();
+}
+
+function loadPhrases() {
+  document.getElementById('phrases-list').innerHTML = phrasesData[currentLevel].map((p,i) => `
+    <div class="phrase-card" id="pc-${i}" onclick="revealPhrase(${i})">
+      <button class="speak-btn" onclick="event.stopPropagation();speakGerman('${p.de.replace(/'/g,"\\'")}')">🔊</button>
+      <div class="phrase-german">${p.de}</div>
+      <div class="phrase-english">${p.en}</div>
+      <div class="phrase-hint">${p.hint}</div>
+      <div class="reveal-tip">Tap to reveal translation</div>
+    </div>`).join('');
+}
+
+function revealPhrase(i) { document.getElementById('pc-'+i).classList.toggle('revealed'); }
+
+let currentQuiz = null;
+let quizUsedWords = [];
+
+async function loadQuiz() {
+  const area = document.getElementById('quiz-area');
+  area.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--ink3);font-size:13px;letter-spacing:0.04em">Generating question<span class=\'typing-dots\'><span>.</span><span>.</span><span>.</span></span></div>';
+
+  const key = getKey();
+  if (!key) {
+    area.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--gold);font-size:13px">Please save your Groq API key above ↑</div>';
+    return;
+  }
+
+  if (quizUsedWords.length > 20) quizUsedWords = [];
+  const avoidList = quizUsedWords.slice(-8).join(', ') || 'none';
+
+  const topics = {
+    Beginner: 'everyday objects, greetings, numbers, colours, food, family members, basic verbs like eat drink go sleep',
+    Intermediate: 'travel, work, emotions, conjunctions, modal verbs, adjectives, weather, hobbies, daily routines',
+    Advanced: 'abstract concepts, idiomatic expressions, compound nouns, philosophical terms, nuanced verbs, politics, culture'
+  };
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        max_tokens: 250,
+        messages: [
+          { role: 'system', content: 'You are a German vocabulary quiz generator. Respond ONLY with valid JSON. No markdown, no explanation, no code fences.' },
+          { role: 'user', content: 'Generate a ' + currentLevel + ' German vocabulary quiz question. Topics: ' + topics[currentLevel] + '. Do NOT reuse these recent words: ' + avoidList + '. Return ONLY this JSON structure: {"word":"German word or short phrase","correct":"correct English meaning","wrong":["wrong 1","wrong 2","wrong 3"],"hint":"one short grammar or usage tip"}' }
+        ]
+      })
+    });
+
+    const d = await res.json();
+    let raw = (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) ? d.choices[0].message.content : '';
+    raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+    const q = JSON.parse(raw);
+
+    currentQuiz = { de: q.word, en: q.correct };
+    quizUsedWords.push(q.word);
+
+    const opts = [q.correct, q.wrong[0], q.wrong[1], q.wrong[2]].sort(() => Math.random() - 0.5);
+
+    let optButtons = '';
+    for (let i = 0; i < opts.length; i++) {
+      const safeOpt = opts[i].replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const safeCorrect = q.correct.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      optButtons += '<button class="quiz-option" onclick="checkAnswer(this,this.dataset.opt,this.dataset.correct)" data-opt="' + safeOpt + '" data-correct="' + safeCorrect + '">' + opts[i] + '</button>';
+    }
+
+    area.innerHTML = '<div class="quiz-question">' + q.word + '</div>'
+      + '<div style="font-size:11px;color:var(--gold);letter-spacing:0.04em;text-align:center;margin-bottom:1.2rem">' + (q.hint || '') + '</div>'
+      + '<div class="quiz-options">' + optButtons + '</div>';
+
+  } catch(e) {
+    area.innerHTML = '<div style="text-align:center;padding:1.5rem;color:var(--red);font-size:13px">Could not generate — check your Groq key.<br><br><button onclick="loadQuiz()" style="padding:6px 16px;font-size:12px;border:1px solid var(--border2);border-radius:20px;background:var(--paper2);cursor:pointer;color:var(--ink2)">Try again ↻</button></div>';
+  }
+}
+
+function checkAnswer(btn, chosen, correct) {
+  // Support both direct args and data attributes
+  const ch = chosen || btn.dataset.opt;
+  const co = correct || btn.dataset.correct;
+  quizTotal++;
+  document.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
+  if (ch === co) { btn.classList.add('correct'); quizScore++; }
+  else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-option').forEach(b => {
+      if ((b.dataset.opt || b.textContent.trim()) === co) b.classList.add('correct');
+    });
+  }
+  document.getElementById('score-display').textContent = quizScore + ' / ' + quizTotal;
+  setTimeout(loadQuiz, 1800);
+}
+
+
+let speakUsedPhrases = [];
+
+async function loadSpeakPrompt() {
+  const promptEl = document.getElementById('speak-prompt');
+  const subEl = document.getElementById('speak-subprompt');
+  document.getElementById('transcript-box').style.display = 'none';
+  const fb = document.getElementById('feedback-box'); fb.className = 'feedback-box'; fb.textContent = '';
+  document.getElementById('speak-error').textContent = '';
+
+  const key = getKey();
+  if (!key) {
+    // Fall back to static prompts if no key
+    const prompts = speakPrompts[currentLevel];
+    const p = prompts[speakIndex % prompts.length];
+    promptEl.textContent = p.de;
+    subEl.textContent = p.en + ' — Click the mic and say this phrase.';
+    return;
+  }
+
+  promptEl.textContent = 'Loading…';
+  subEl.textContent = 'Generating a fresh phrase for you…';
+
+  if (speakUsedPhrases.length > 15) speakUsedPhrases = [];
+  const avoid = speakUsedPhrases.slice(-6).join(', ') || 'none';
+
+  const contexts = {
+    Beginner: 'simple greetings, introductions, asking for things, basic politeness, numbers, colours',
+    Intermediate: 'ordering food, asking for directions, making plans, expressing opinions, describing things',
+    Advanced: 'discussing ideas, expressing nuanced feelings, hypothetical situations, formal register, idioms'
+  };
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        max_tokens: 120,
+        messages: [
+          { role: 'system', content: 'You are a German speaking practice generator. Respond ONLY with valid JSON. No markdown, no explanation.' },
+          { role: 'user', content: 'Generate a ' + currentLevel + ' German speaking practice phrase. Context: ' + contexts[currentLevel] + '. Do NOT reuse: ' + avoid + '. Return ONLY: {"de":"German phrase","en":"English translation"}' }
+        ]
+      })
+    });
+    const d = await res.json();
+    let raw = (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || '';
+    raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+    const p = JSON.parse(raw);
+    speakUsedPhrases.push(p.de);
+    promptEl.textContent = p.de;
+    subEl.textContent = p.en + ' — Click the mic and say this phrase.';
+  } catch(e) {
+    // Fall back to static on error
+    const prompts = speakPrompts[currentLevel];
+    const p = prompts[speakIndex % prompts.length];
+    promptEl.textContent = p.de;
+    subEl.textContent = p.en + ' — Click the mic and say this phrase.';
+  }
+}
+
+function nextSpeakPrompt() { speakIndex++; loadSpeakPrompt(); }
+
+async function toggleRecording() {
+  if (isRecording) { recognition && recognition.stop(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { document.getElementById('speak-error').textContent = 'Speech recognition not supported. Use Chrome.'; return; }
+  recognition = new SR(); recognition.lang = 'de-DE'; recognition.interimResults = false; recognition.maxAlternatives = 1;
+  const btn = document.getElementById('mic-btn');
+  isRecording = true; btn.classList.add('recording'); btn.textContent = '⏹';
+  recognition.start();
+  recognition.onresult = async (e) => {
+    const t = e.results[0][0].transcript;
+    const tb = document.getElementById('transcript-box'); tb.style.display = 'block'; tb.textContent = '"' + t + '"';
+    evalSpeaking(t);
+  };
+  recognition.onerror = (e) => { document.getElementById('speak-error').textContent = 'Mic error: ' + e.error; stopRec(); };
+  recognition.onend = stopRec;
+}
+
+function stopRec() { isRecording = false; const btn = document.getElementById('mic-btn'); btn.classList.remove('recording'); btn.textContent = '🎤'; }
+
+function normalize(str) {
+  return str.toLowerCase()
+    .replace(/[!?,.\'"""\u201e\u2026\-]/g, '')
+    .replace(/\u00e4/g,'ae').replace(/\u00f6/g,'oe').replace(/\u00fc/g,'ue').replace(/\u00df/g,'ss')
+    .replace(/\s+/g, ' ').trim();
+}
+
+function wordSimilarity(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m+1}, (_,i) => Array.from({length: n+1}, (_,j) => i===0?j:j===0?i:0));
+  for (let i=1;i<=m;i++) for (let j=1;j<=n;j++)
+    dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  const maxLen = Math.max(m, n);
+  return maxLen === 0 ? 1 : 1 - dp[m][n] / maxLen;
+}
+
+function scoreSpeech(target, spoken) {
+  const tWords = normalize(target).split(' ').filter(Boolean);
+  const sWords = normalize(spoken).split(' ').filter(Boolean);
+  if (tWords.length === 0) return 1;
+  let matched = 0;
+  const used = new Set();
+  for (const tw of tWords) {
+    let best = 0, bestIdx = -1;
+    for (let i = 0; i < sWords.length; i++) {
+      if (used.has(i)) continue;
+      const sim = wordSimilarity(tw, sWords[i]);
+      if (sim > best) { best = sim; bestIdx = i; }
+    }
+    if (best >= 0.7) { matched += best; if (bestIdx >= 0) used.add(bestIdx); }
+  }
+  return matched / tWords.length;
+}
+
+function evalSpeaking(transcript) {
+  const target = document.getElementById('speak-prompt').textContent;
+  const fb = document.getElementById('feedback-box');
+  fb.className = 'feedback-box visible ok'; fb.textContent = 'Evaluating…';
+
+  const score = scoreSpeech(target, transcript);
+  const targetClean = target.replace(/\.\.\./, '').trim();
+
+  let cls, msg;
+  if (score >= 0.85) {
+    cls = 'good';
+    const praise = ['Ausgezeichnet!', 'Wunderbar!', 'Sehr gut!', 'Perfekt!'];
+    msg = 'Great! ' + praise[Math.floor(Math.random()*praise.length)] + ' Your pronunciation matched the phrase perfectly. Keep it up! \uD83C\uDF89';
+  } else if (score >= 0.55) {
+    const tNorm = normalize(target).split(' ').filter(Boolean);
+    const sNorm = normalize(transcript).split(' ').filter(Boolean);
+    const missed = tNorm.filter(w => !sNorm.some(s => wordSimilarity(w, s) >= 0.7));
+    cls = 'ok';
+    msg = 'Close! You got most of it right. ';
+    if (missed.length > 0) msg += 'Try focusing on: "' + missed.slice(0,3).join(' ') + '"';
+    msg += ' — keep practising! \uD83D\uDCAA';
+  } else {
+    cls = 'bad';
+    msg = 'Try again: The target phrase was "' + targetClean + '". You said "' + transcript + '". Listen to the \uD83D\uDD0A audio and try to match it closely.';
+  }
+
+  fb.className = 'feedback-box visible ' + cls;
+  fb.textContent = msg;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  const cb = document.getElementById('chat-box');
+  cb.innerHTML += `<div class="msg user"><div class="msg-avatar user-av">Me</div><div class="msg-bubble">${esc(text)}</div></div>`;
+  const tid = 'think-' + Date.now();
+  cb.innerHTML += `<div class="msg" id="${tid}"><div class="msg-avatar">${GIRL_SVG}</div><div class="msg-bubble"><span class="typing-dots"><span>·</span><span>·</span><span>·</span></span></div></div>`;
+  cb.scrollTop = cb.scrollHeight;
+  document.getElementById('send-btn').disabled = true;
+  try {
+    const groqKey = getKey();
+    if (!groqKey) { showKeyError('chat-box', tid); document.getElementById('send-btn').disabled = false; return; }
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 1000,
+        messages: [
+          { role: 'system', content: `You are Lena, a warm, encouraging German language tutor. The learner's level is ${currentLevel}. Answer grammar questions clearly with examples. Correct mistakes gently. For translations, give German and explain key vocab. If they write in German, respond partly in German and give friendly corrections. Be warm and motivating. Keep responses concise.` },
+          { role: 'user', content: text }
+        ] })
+    });
+    const d = await res.json();
+    const reply = d.choices?.[0]?.message?.content || d.error?.message || 'Something went wrong.';
+    const el = document.getElementById(tid);
+    if (el) el.querySelector('.msg-bubble').innerHTML = reply.replace(/\n/g, '<br>');
+  } catch { const el = document.getElementById(tid); if (el) el.querySelector('.msg-bubble').textContent = 'Network error. Please try again.'; }
+  document.getElementById('send-btn').disabled = false;
+  cb.scrollTop = cb.scrollHeight;
+}
+
+let convoHistory = [], convoRecognition = null, convoRecording = false;
+const topicContext = {
+  cafe: 'a café in Germany. You are the barista. Start by greeting the customer and asking what they would like.',
+  directions: 'a German city street. You are a local. Start by asking if the learner needs help finding something.',
+  shopping: 'a German clothing shop. You are the assistant. Start by greeting and asking if you can help.',
+  weather: 'a park bench in Germany. You are a friendly stranger. Start with a comment about the weather.',
+  intro: 'a social gathering in Germany. You are meeting the learner for the first time. Introduce yourself with a German name.',
+  travel: 'a conversation about travel. Ask the learner where they have been or would like to visit.',
+  food: 'a German restaurant. You are the waiter. Welcome the guest and offer the menu.',
+  work: 'a professional networking event in Germany. Ask what the learner does for work.'
+};
+
+async function startConvo() {
+  convoHistory = [];
+  const box = document.getElementById('convo-box');
+  box.innerHTML = '';
+  document.getElementById('hint-row').innerHTML = '';
+  document.getElementById('convo-error').textContent = '';
+  const topic = document.getElementById('convo-topic').value;
+  box.innerHTML += `<div class="msg" id="convo-start"><div class="msg-avatar">${GIRL_SVG}</div><div class="msg-bubble"><span class="typing-dots"><span>·</span><span>·</span><span>·</span></span></div></div>`;
+  box.scrollTop = box.scrollHeight;
+  try {
+    const groqKey = getKey();
+    if (!groqKey) { const el = document.getElementById('convo-start'); if(el) el.querySelector('.msg-bubble').innerHTML = '<span style="color:var(--gold)">Please save your Groq API key in the banner above ↑</span>'; return; }
+    const sysPrm = `You are a friendly native German speaker in ${topicContext[topic]}\nRules:\n- Speak ONLY in German (with English translation on next line: *English: …*).\n- Keep messages short — 1-3 sentences.\n- Ask ONE question at a time.\n- After learner replies, correct any German mistakes: ✏️ Correction: "[mistake]" → "[correct]" — [reason]\n- If perfect: ✅ Gut gemacht! and continue.\n- Adapt to ${currentLevel} level.`;
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 300,
+        messages: [{ role: 'system', content: sysPrm }, { role: 'user', content: 'Start the conversation.' }] })
+    });
+    const d = await res.json();
+    const reply = d.choices?.[0]?.message?.content || d.error?.message || 'Hallo!';
+    convoHistory.push({ role: 'assistant', content: reply });
+    const el = document.getElementById('convo-start');
+    if (el) el.querySelector('.msg-bubble').innerHTML = formatConvoMsg(reply);
+    box.scrollTop = box.scrollHeight;
+    showHints();
+    speakGerman(extractGerman(reply));
+  } catch { const el = document.getElementById('convo-start'); if (el) el.querySelector('.msg-bubble').textContent = 'Could not start — check your connection.'; }
+}
+
+function formatConvoMsg(text) {
+  return text
+    .replace(/\*(English:.*?)\*/g, '<span style="color:var(--ink3);font-style:italic;font-size:13px">$1</span>')
+    .replace(/(✏️ Correction:.*)/g, '<span class="correction-badge">$1</span>')
+    .replace(/(✅.*)/g, '<span style="color:var(--teal);font-size:13px">$1</span>')
+    .replace(/\n/g, '<br>');
+}
+
+function extractGerman(text) {
+  // Returns array of German-only strings — one per line, ready to speak
+  const result = [];
+
+  for (const rawLine of text.split('\n')) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    // Skip pure English translation lines
+    if (line.match(/^\*?English:/i)) continue;
+    if (line.startsWith('*English') || line.startsWith('*english')) continue;
+
+    // Skip pure correction lines (✏️) — they have no German to speak
+    if (line.startsWith('✏️') || line.startsWith('Correction:')) continue;
+
+    // ✅ lines contain German text after the emoji — keep them but strip the emoji
+    // e.g. "✅ Gut gemacht! Möchten Sie..." → "Gut gemacht! Möchten Sie..."
+    let clean = line
+      .replace(/^✅\s*/, '')                          // strip leading ✅
+      .replace(/\*English:[^*\n]*(\*|$)/gi, '')     // strip *English: ...*
+      .replace(/\*[^*]*\*/g, '')                     // strip other *italic* spans
+      .replace(/\*/g, '')
+      .trim();
+
+    if (clean.length > 1) result.push(clean);
+  }
+
+  return result;
+}
+
+function showHints() {
+  const hints = {
+    Beginner: ['Ja, bitte', 'Nein, danke', 'Ich verstehe nicht', 'Können Sie das wiederholen?', 'Wie bitte?'],
+    Intermediate: ['Das stimmt', 'Ich bin damit einverstanden', 'Könnten Sie das erklären?', 'Interessant!', 'Ich glaube…'],
+    Advanced: ['Meiner Meinung nach…', 'Das kommt darauf an…', 'Einerseits… andererseits…', 'Ich würde sagen…']
+  };
+  document.getElementById('hint-row').innerHTML = '<span style="font-size:11px;color:var(--ink3);letter-spacing:0.04em;align-self:center;margin-right:4px">Quick replies:</span>' +
+    hints[currentLevel].map(h => `<button class="hint-chip" onclick="useHint('${h.replace(/'/g,"\\'")}')"> ${h}</button>`).join('');
+}
+
+function useHint(text) { document.getElementById('convo-input').value = text; document.getElementById('convo-input').focus(); }
+
+async function sendConvo() {
+  const input = document.getElementById('convo-input');
+  const text = input.value.trim();
+  if (!text || convoHistory.length === 0) { if (!text && convoHistory.length === 0) startConvo(); return; }
+  input.value = '';
+  stopSpeaking();  // stop AI speaking when user sends a new message
+  const box = document.getElementById('convo-box');
+  box.innerHTML += `<div class="msg user"><div class="msg-avatar user-av">Me</div><div class="msg-bubble">${esc(text)}</div></div>`;
+  const tid = 'ct-' + Date.now();
+  box.innerHTML += `<div class="msg" id="${tid}"><div class="msg-avatar">${GIRL_SVG}</div><div class="msg-bubble"><span class="typing-dots"><span>·</span><span>·</span><span>·</span></span></div></div>`;
+  box.scrollTop = box.scrollHeight;
+  convoHistory.push({ role: 'user', content: text });
+  document.getElementById('convo-send').disabled = true;
+  try {
+    const groqKey = getKey();
+    if (!groqKey) { const el = document.getElementById(tid); if(el) el.querySelector('.msg-bubble').innerHTML = '<span style="color:var(--gold)">Please save your Groq API key above ↑</span>'; document.getElementById('convo-send').disabled = false; return; }
+    const sysP = `You are a friendly native German speaker in ${topicContext[document.getElementById('convo-topic').value]}\nRules:\n- Speak ONLY in German (with English translation: *English: …*).\n- Keep messages short — 1-3 sentences.\n- Ask ONE question at a time.\n- Correct mistakes: ✏️ Correction: "[mistake]" → "[correct]" — [reason]\n- If perfect: ✅ Gut gemacht! and continue.\n- Adapt to ${currentLevel} level.`;
+    const gMsgs = [{ role: 'system', content: sysP }, ...convoHistory];
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 400, messages: gMsgs })
+    });
+    const d = await res.json();
+    const reply = d.choices?.[0]?.message?.content || d.error?.message || '…';
+    convoHistory.push({ role: 'assistant', content: reply });
+    const el = document.getElementById(tid);
+    if (el) el.querySelector('.msg-bubble').innerHTML = formatConvoMsg(reply);
+    box.scrollTop = box.scrollHeight;
+    speakGerman(extractGerman(reply));
+  } catch { const el = document.getElementById(tid); if (el) el.querySelector('.msg-bubble').textContent = 'Network error. Please try again.'; }
+  document.getElementById('convo-send').disabled = false;
+}
+
+function toggleConvoMic() {
+  if (convoRecording) {
+    convoRecognition && convoRecognition.stop();
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { document.getElementById('convo-error').textContent = 'Speech recognition not supported — use Chrome or Edge.'; return; }
+
+  convoRecognition = new SR();
+  convoRecognition.lang = 'de-DE';
+  convoRecognition.interimResults = true;   // show live transcript
+  convoRecognition.continuous = true;       // keep listening until pause detected
+  convoRecognition.maxAlternatives = 1;
+
+  const btn = document.getElementById('convo-mic');
+  const interim = document.getElementById('interim-display');
+  const input = document.getElementById('convo-input');
+  let finalTranscript = '';
+  let silenceTimer = null;
+  const PAUSE_MS = 1500; // send after 1.5s of silence
+
+  convoRecording = true;
+  btn.classList.add('recording');
+  btn.textContent = '⏹';
+  interim.style.display = 'block';
+  interim.textContent = '🎤 Listening…';
+
+  convoRecognition.start();
+
+  convoRecognition.onresult = (e) => {
+    let interimText = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        finalTranscript += t + ' ';
+      } else {
+        interimText += t;
+      }
+    }
+    // Show live interim text
+    const display = (finalTranscript + interimText).trim();
+    interim.textContent = display ? '💬 ' + display : '🎤 Listening…';
+    input.value = finalTranscript.trim();
+
+    // Reset silence timer on every new word
+    clearTimeout(silenceTimer);
+    if (finalTranscript.trim().length > 0) {
+      silenceTimer = setTimeout(() => {
+        // Pause detected — stop recording and auto-send
+        convoRecognition.stop();
+      }, PAUSE_MS);
+    }
+  };
+
+  convoRecognition.onerror = (e) => {
+    if (e.error !== 'aborted') {
+      document.getElementById('convo-error').textContent = 'Mic error: ' + e.error;
+    }
+    clearTimeout(silenceTimer);
+    stopConvoMic();
+  };
+
+  convoRecognition.onend = () => {
+    clearTimeout(silenceTimer);
+    stopConvoMic();
+    // Auto-send if we captured something
+    const captured = input.value.trim();
+    if (captured.length > 0) {
+      interim.textContent = '✓ Sending: ' + captured;
+      setTimeout(() => {
+        interim.style.display = 'none';
+        interim.textContent = '';
+        sendConvo();
+      }, 400);
+    } else {
+      interim.style.display = 'none';
+    }
+  };
+}
+
+function stopConvoMic() {
+  convoRecording = false;
+  const btn = document.getElementById('convo-mic');
+  btn.classList.remove('recording');
+  btn.textContent = '🎤';
+}
+
+
+// ── GROQ KEY MANAGEMENT ──
+function getKey() { return localStorage.getItem('groq_key') || ''; }
+
+function saveKey() {
+  const val = document.getElementById('key-input').value.trim();
+  if (!val) { alert('Please paste your Groq API key first.'); return; }
+  if (!val.startsWith('gsk_')) { alert('That doesn\'t look like a Groq key (should start with gsk_). Check and try again.'); return; }
+  localStorage.setItem('groq_key', val);
+  updateKeyBanner();
+}
+
+function clearKey() {
+  localStorage.removeItem('groq_key');
+  document.getElementById('key-input').value = '';
+  updateKeyBanner();
+}
+
+function updateKeyBanner() {
+  const key = getKey();
+  const banner = document.getElementById('key-banner');
+  const input = document.getElementById('key-input');
+  if (key) {
+    banner.className = 'key-banner ok';
+    input.value = key.slice(0,8) + '••••••••••••••••••••••';
+    input.disabled = true;
+    banner.querySelector('.key-save-btn').style.display = 'none';
+    if (!banner.querySelector('.key-clear-btn')) {
+      const btn = document.createElement('button');
+      btn.className = 'key-clear-btn'; btn.textContent = 'Change key';
+      btn.onclick = () => { input.disabled = false; input.value = ''; banner.className = 'key-banner'; banner.querySelector('.key-save-btn').style.display = ''; btn.remove(); };
+      banner.appendChild(btn);
+    }
+    const lbl = banner.querySelector('.key-label');
+    lbl.textContent = '✓ Groq key saved — AI features ready!';
+  }
+}
+
+function showKeyError(boxId, msgId) {
+  const el = document.getElementById(msgId);
+  if (el) el.querySelector('.msg-bubble').innerHTML = '<span style="color:var(--gold);font-size:13px">⚠️ Please save your Groq API key in the banner above first. Get one free at <a href=\"https://console.groq.com/keys\" target=\"_blank\" style=\"color:var(--gold)\">console.groq.com</a></span>';
+}
+
+
+// ══════════════════════════════════════════
+// GOETHE EXAM PRACTICE
+// ══════════════════════════════════════════
+let examLevel = 'A1';
+let examSkill = 'reading';
+let examCorrect = 0, examTotal = 0;
+let currentExam = null;
+let examSpeakRecognition = null, examSpeakRecording = false;
+
+function setExamLevel(l) {
+  examLevel = l;
+  document.querySelectorAll('.exam-level-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent.includes(l))
+  );
+  loadExam();
+}
+
+function setExamSkill(s) {
+  examSkill = s;
+  document.querySelectorAll('.skill-tab').forEach(b =>
+    b.classList.toggle('active', b.getAttribute('onclick').includes("'" + s + "'"))
+  );
+  loadExam();
+}
+
+function updateExamScore() {
+  document.getElementById('exam-score-correct').textContent = examCorrect;
+  document.getElementById('exam-score-total').textContent = examTotal;
+  document.getElementById('exam-score-pct').textContent =
+    examTotal > 0 ? Math.round(examCorrect / examTotal * 100) + '%' : '—';
+}
+
+async function loadExam() {
+  const area = document.getElementById('exam-area');
+  area.innerHTML = '<div class="exam-loading">Generating ' + examLevel + ' ' + examSkill + ' exercise<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></div>';
+
+  const key = getKey();
+  if (!key) {
+    area.innerHTML = '<div class="exam-loading" style="color:var(--gold)">Please save your Groq API key above ↑</div>';
+    return;
+  }
+
+  const prompts = {
+    reading: `Create a Goethe ${examLevel} reading comprehension exercise in German.
+Return ONLY this JSON:
+{
+  "text": "A short German passage (4-6 sentences, appropriate for ${examLevel})",
+  "question": "A comprehension question in German",
+  "options": ["correct answer", "wrong 1", "wrong 2", "wrong 3"],
+  "correct": 0,
+  "explanation": "Brief explanation in English of why the answer is correct"
+}`,
+    writing: `Create a Goethe ${examLevel} writing task in German.
+Return ONLY this JSON:
+{
+  "prompt": "Writing task instructions in German (like real Goethe exam)",
+  "context": "Brief context or scenario in German",
+  "hint": "What the ideal answer should include (in English, for feedback reference)",
+  "sampleAnswer": "A model answer in German",
+  "wordCount": ${examLevel === 'A1' ? 20 : examLevel === 'A2' ? 40 : 80}
+}`,
+    speaking: `Create a Goethe ${examLevel} speaking task in German.
+Return ONLY this JSON:
+{
+  "task": "Speaking task description in German (like real Goethe exam)",
+  "scenario": "The situation/context in English",
+  "keyPhrases": ["useful phrase 1 in German", "useful phrase 2 in German", "useful phrase 3 in German"],
+  "sampleAnswer": "A model spoken response in German (2-4 sentences)"
+}`,
+    listening: `Create a Goethe ${examLevel} listening exercise. Since we use TTS, write a short German dialogue or announcement.
+Return ONLY this JSON:
+{
+  "script": "The German text to be read aloud (3-5 sentences, realistic for ${examLevel})",
+  "context": "What this audio represents (e.g. 'A phone message from a friend')",
+  "question": "A comprehension question in German about the audio",
+  "options": ["correct answer", "wrong 1", "wrong 2", "wrong 3"],
+  "correct": 0,
+  "explanation": "Brief explanation in English of why the answer is correct"
+}`
+  };
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        max_tokens: 600,
+        messages: [
+          { role: 'system', content: 'You are a Goethe Institute exam content creator. Return ONLY valid JSON, no markdown, no explanation.' },
+          { role: 'user', content: prompts[examSkill] }
+        ]
+      })
+    });
+
+    const d = await res.json();
+    let raw = (d.choices?.[0]?.message?.content || '').replace(/```json/g,'').replace(/```/g,'').trim();
+    currentExam = JSON.parse(raw);
+    renderExam(currentExam);
+
+  } catch(e) {
+    area.innerHTML = '<div class="exam-loading" style="color:var(--red)">Could not generate — check your Groq key.<br><br><button class="exam-new-btn" onclick="loadExam()" style="margin-top:8px">Try again ↻</button></div>';
+  }
+}
+
+function renderExam(q) {
+  const area = document.getElementById('exam-area');
+  const skillLabels = { reading: '📖 Reading Comprehension', writing: '✏️ Writing Task', speaking: '🎤 Speaking Task', listening: '🔊 Listening Comprehension' };
+
+  if (examSkill === 'reading') {
+    const opts = [...q.options];
+    const correct = opts[q.correct];
+    const shuffled = opts.sort(() => Math.random() - 0.5);
+    area.innerHTML = `
+      <div class="exam-card">
+        <div class="exam-label">${skillLabels.reading} · ${examLevel}</div>
+        <div class="exam-text">${q.text}</div>
+        <div class="exam-question">${q.question}</div>
+        ${shuffled.map(o => {
+          const safe = o.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+          const safeC = correct.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+          return '<button class="exam-option" data-opt="' + safe + '" data-correct="' + safeC + '" onclick="checkExamReading(this)">' + o + '</button>';
+        }).join('')}
+        <div class="exam-feedback" id="exam-fb"></div>
+      </div>`;
+
+  } else if (examSkill === 'writing') {
+    area.innerHTML = `
+      <div class="exam-card">
+        <div class="exam-label">${skillLabels.writing} · ${examLevel}</div>
+        <div class="exam-text">${q.context}</div>
+        <div class="exam-question">${q.prompt}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:8px">Aim for ~${q.wordCount} words</div>
+        <textarea class="exam-textarea" id="exam-writing-input" placeholder="Schreiben Sie hier auf Deutsch…"></textarea>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="exam-submit-btn" id="exam-write-btn" onclick="checkExamWriting()">Submit for Feedback ↗</button>
+          <button class="exam-new-btn" onclick="loadExam()">New Task ↻</button>
+        </div>
+        <div class="exam-feedback" id="exam-fb"></div>
+      </div>`;
+
+  } else if (examSkill === 'speaking') {
+    area.innerHTML = `
+      <div class="exam-card">
+        <div class="exam-label">${skillLabels.speaking} · ${examLevel}</div>
+        <div style="font-size:12px;color:var(--ink3);font-style:italic;margin-bottom:0.75rem">${q.scenario}</div>
+        <div class="exam-text">${q.task}</div>
+        <div style="margin-bottom:1rem">
+          <div style="font-size:11px;color:var(--ink3);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px">Useful phrases</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${q.keyPhrases.map(p => '<span style="padding:4px 10px;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border);border-radius:20px;font-size:12px">' + p + '</span>').join('')}
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button class="exam-submit-btn" id="exam-speak-btn" onclick="toggleExamSpeaking()">🎤 Start Speaking</button>
+          <button class="exam-new-btn" onclick="loadExam()">New Task ↻</button>
+        </div>
+        <div id="exam-speak-transcript" style="margin-top:10px;display:none;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;font-style:italic;color:var(--ink2)"></div>
+        <div style="margin-top:10px;padding:10px 14px;background:var(--paper2);border:1px solid var(--border);border-radius:var(--r-sm)">
+          <div style="font-size:11px;color:var(--ink3);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px">Model answer</div>
+          <div style="font-size:13px;color:var(--ink2);font-style:italic">${q.sampleAnswer}</div>
+        </div>
+        <div class="exam-feedback" id="exam-fb"></div>
+      </div>`;
+
+  } else if (examSkill === 'listening') {
+    const opts = [...q.options];
+    const correct = opts[q.correct];
+    const shuffled = opts.sort(() => Math.random() - 0.5);
+    area.innerHTML = `
+      <div class="exam-card">
+        <div class="exam-label">${skillLabels.listening} · ${examLevel}</div>
+        <div style="font-size:12px;color:var(--ink3);font-style:italic;margin-bottom:0.75rem">${q.context}</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap">
+          <button class="listen-btn" onclick="playListening()">▶ Play Audio</button>
+          <button class="listen-btn" style="background:var(--paper2);color:var(--ink3);border-color:var(--border)" onclick="playListening()">↻ Replay</button>
+          <span style="font-size:11px;color:var(--ink3)">Listen carefully, then answer</span>
+        </div>
+        <div class="exam-question">${q.question}</div>
+        ${shuffled.map(o => {
+          const safe = o.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+          const safeC = correct.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+          return '<button class="exam-option" data-opt="' + safe + '" data-correct="' + safeC + '" onclick="checkExamReading(this)">' + o + '</button>';
+        }).join('')}
+        <div class="exam-feedback" id="exam-fb"></div>
+      </div>`;
+
+    // Auto-play the audio
+    setTimeout(() => playListening(), 600);
+  }
+}
+
+function playListening() {
+  if (!currentExam || !currentExam.script) return;
+  speakGerman(currentExam.script);
+}
+
+function checkExamReading(btn) {
+  const chosen = btn.dataset.opt;
+  const correct = btn.dataset.correct;
+  examTotal++;
+  document.querySelectorAll('.exam-option').forEach(b => b.disabled = true);
+  const isCorrect = chosen === correct;
+  if (isCorrect) { btn.classList.add('correct'); examCorrect++; }
+  else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.exam-option').forEach(b => { if (b.dataset.opt === correct) b.classList.add('correct'); });
+  }
+  updateExamScore();
+  const fb = document.getElementById('exam-fb');
+  fb.className = 'exam-feedback visible ' + (isCorrect ? 'pass' : 'fail');
+  fb.innerHTML = (isCorrect ? '✅ Richtig! ' : '❌ Leider falsch. ') + (currentExam.explanation || '') +
+    '<br><br><button class="exam-new-btn" onclick="loadExam()" style="margin-top:4px">Next Exercise →</button>';
+}
+
+async function checkExamWriting() {
+  const text = document.getElementById('exam-writing-input').value.trim();
+  if (!text) return;
+  const btn = document.getElementById('exam-write-btn');
+  btn.disabled = true; btn.textContent = 'Marking…';
+
+  const key = getKey();
+  const fb = document.getElementById('exam-fb');
+  fb.className = 'exam-feedback visible partial'; fb.textContent = 'Analysing your writing…';
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile', max_tokens: 400,
+        messages: [
+          { role: 'system', content: 'You are a Goethe Institute examiner marking a writing task. Be encouraging but precise.' },
+          { role: 'user', content: 'Exam level: ' + examLevel + '\nTask: ' + currentExam.prompt + '\nIdeal content: ' + currentExam.hint + '\nStudent wrote: ' + text + '\n\nGive feedback in English: 1) Overall grade (Pass/Near Pass/Fail), 2) What was good, 3) Grammar/vocabulary corrections (max 3), 4) One tip for improvement. Keep it concise and encouraging.' }
+        ]
+      })
+    });
+    const d = await res.json();
+    const reply = d.choices?.[0]?.message?.content || 'Could not evaluate.';
+    const pass = reply.toLowerCase().includes('pass') && !reply.toLowerCase().includes('near pass') && !reply.toLowerCase().includes('fail');
+    const near = reply.toLowerCase().includes('near pass');
+    if (pass) examCorrect++;
+    examTotal++;
+    updateExamScore();
+    fb.className = 'exam-feedback visible ' + (pass ? 'pass' : near ? 'partial' : 'fail');
+    fb.innerHTML = reply.replace(/\n/g,'<br>') +
+      '<br><br><div style="font-size:12px;color:var(--ink3);margin-top:8px">Model answer: <em>' + currentExam.sampleAnswer + '</em></div>' +
+      '<br><button class="exam-new-btn" onclick="loadExam()">Next Exercise →</button>';
+  } catch(e) {
+    fb.className = 'exam-feedback visible fail';
+    fb.textContent = 'Could not evaluate — check your connection.';
+  }
+  btn.disabled = false; btn.textContent = 'Submit for Feedback ↗';
+}
+
+function toggleExamSpeaking() {
+  if (examSpeakRecording) { examSpeakRecognition && examSpeakRecognition.stop(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Speech recognition needs Chrome or Edge.'); return; }
+  examSpeakRecognition = new SR();
+  examSpeakRecognition.lang = 'de-DE';
+  examSpeakRecognition.interimResults = false;
+  const btn = document.getElementById('exam-speak-btn');
+  examSpeakRecording = true; btn.textContent = '⏹ Stop Recording';
+  examSpeakRecognition.start();
+  examSpeakRecognition.onresult = async (e) => {
+    const transcript = e.results[0][0].transcript;
+    const tbox = document.getElementById('exam-speak-transcript');
+    tbox.style.display = 'block'; tbox.textContent = '"' + transcript + '"';
+    await evalExamSpeaking(transcript);
+  };
+  examSpeakRecognition.onerror = () => { stopExamSpeaking(); };
+  examSpeakRecognition.onend = stopExamSpeaking;
+}
+
+function stopExamSpeaking() {
+  examSpeakRecording = false;
+  const btn = document.getElementById('exam-speak-btn');
+  if (btn) btn.textContent = '🎤 Speak Again';
+}
+
+async function evalExamSpeaking(transcript) {
+  const key = getKey();
+  const fb = document.getElementById('exam-fb');
+  fb.className = 'exam-feedback visible partial'; fb.textContent = 'Evaluating your speaking…';
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile', max_tokens: 300,
+        messages: [
+          { role: 'system', content: 'You are a Goethe Institute speaking examiner. Be encouraging and specific.' },
+          { role: 'user', content: 'Exam level: ' + examLevel + '\nSpeaking task: ' + currentExam.task + '\nStudent said: ' + transcript + '\n\nEvaluate in English: 1) Pass/Near Pass/Fail, 2) What was good, 3) Up to 2 corrections, 4) One tip. Be brief and warm.' }
+        ]
+      })
+    });
+    const d = await res.json();
+    const reply = d.choices?.[0]?.message?.content || '';
+    const pass = reply.toLowerCase().includes('pass') && !reply.toLowerCase().includes('near') && !reply.toLowerCase().includes('fail');
+    const near = reply.toLowerCase().includes('near');
+    if (pass) examCorrect++;
+    examTotal++;
+    updateExamScore();
+    fb.className = 'exam-feedback visible ' + (pass ? 'pass' : near ? 'partial' : 'fail');
+    fb.innerHTML = reply.replace(/\n/g,'<br>') +
+      '<br><br><button class="exam-new-btn" onclick="loadExam()" style="margin-top:4px">Next Exercise →</button>';
+  } catch(e) {
+    fb.className = 'exam-feedback visible fail';
+    fb.textContent = 'Could not evaluate.';
+  }
+}
+
+loadPhrases(); loadQuiz(); loadSpeakPrompt(); updateKeyBanner();
+</script>
+</body>
+</html>
